@@ -11,14 +11,25 @@ var server = net.createServer(function(socket){
     console.log("active sockets: ", activeSockets.size)
   })
 
-  process.stdin.on('data', function(data){
-    socket.write(data)
-  })
-
   socket.on('data', function(data){
+    var senderIndex = getIndex(socket)
+    var recipients = activeSockets.streams.filter(function(stream){
+      return matchIndex(senderIndex, stream)
+    })
+
+    recipients.forEach(function(stream){
+      stream.write(data)
+    })
     process.stdout.write(data)
   })
 })
 
 server.listen(8124)
 
+var getIndex = function(stream){
+  return activeSockets.streams.indexOf(stream)
+}
+
+var matchIndex = function(index, stream){
+  return getIndex(stream) !== index
+}
