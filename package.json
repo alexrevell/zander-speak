@@ -4,7 +4,8 @@
   "description": "Set up a server and clients over sockets for fun",
   "main": "client.js",
   "dependencies": {
-    "net": "^1.0.2"
+    "net": "^1.0.2",
+    "stream-set": "^1.1.0"
   },
   "devDependencies": {},
   "scripts": {
@@ -16,5 +17,5 @@
     "socket"
   ],
   "author": "Alex",
-  "license": "ISC"
+  "license": "MIT"
 }
