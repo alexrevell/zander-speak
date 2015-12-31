@@ -9,5 +9,4 @@ process.stdin.on('data', function(data){
 
 socket.on('data', function(data){
   console.log(data.username + "> " + data.message)
-  // process.stdout.write(data)
 })

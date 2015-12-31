@@ -1,8 +1,10 @@
 var net = require('net')
+var register = require('register-multicast-dns')
 var streamSet = require('stream-set')
 var jsonStream = require('duplex-json-stream')
-
 var activeSockets = streamSet()
+
+register('zander-speak.local')
 
 var server = net.createServer(function(socket){
   socket = jsonStream(socket)
