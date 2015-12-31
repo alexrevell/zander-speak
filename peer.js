@@ -22,30 +22,9 @@ swarm.on('connection', function(socket, id){
 
   socket.on('data', function(data){
     console.log(data.username + "> " + data.message)
-
-    // var senderIndex = getIndex(socket)
-    // var recipients = activeSockets.streams.filter(function(stream){
-    //   return matchIndex(senderIndex, stream)
-    // })
-
-    // recipients.forEach(function(stream){
-    //   stream.write({ username: data.username, message: data.message })
-    // })
   })
 
   process.stdin.on('data', function(data){
     socket.write({ username: username, message: data.toString().trim() })
   })
-
-  // swarm.on('data', function(data){
-  //   console.log(data)
-  // })
 })
-
-var getIndex = function(stream){
-  return activeSockets.streams.indexOf(stream)
-}
-
-var matchIndex = function(index, stream){
-  return getIndex(stream) !== index
-}
