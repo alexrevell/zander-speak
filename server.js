@@ -1,9 +1,11 @@
 var net = require('net')
 var streamSet = require('stream-set')
+var jsonStream = require('duplex-json-stream')
 
 var activeSockets = streamSet()
 
 var server = net.createServer(function(socket){
+  socket = jsonStream(socket)
   activeSockets.add(socket)
   console.log("active sockets: ", activeSockets.size)
 
@@ -18,9 +20,8 @@ var server = net.createServer(function(socket){
     })
 
     recipients.forEach(function(stream){
-      stream.write(data)
+      stream.write({ username: data.username, message: data.message })
     })
-    process.stdout.write(data)
   })
 })
 
