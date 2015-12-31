@@ -7,24 +7,26 @@ var username = process.argv[2]
 var me = process.argv[3]
 var peers = process.argv.slice(4)
 
-var activeSockets = streamSet()
+var connections = streamSet()
 var swarm = topology(me, peers)
 
 swarm.on('connection', function(socket, id){
   socket = jsonStream(socket)
-  activeSockets.add(socket)
+  connections.add(socket)
   console.log("I am connected to...", id)
-  console.log("active sockets: ", activeSockets.size)
+  console.log("active sockets: ", connections.size)
 
   socket.on('close', function(){
-    console.log("active sockets: ", activeSockets.size)
+    console.log("active sockets: ", connections.size)
   })
 
   socket.on('data', function(data){
     console.log(data.username + "> " + data.message)
   })
+})
 
-  process.stdin.on('data', function(data){
+process.stdin.on('data', function(data){
+  connections.forEach(function(socket){
     socket.write({ username: username, message: data.toString().trim() })
   })
 })
