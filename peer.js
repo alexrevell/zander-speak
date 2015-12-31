@@ -10,10 +10,13 @@ var peers = process.argv.slice(4)
 var connections = streamSet()
 var swarm = topology(me, peers)
 
-swarm.on('connection', function(socket, id){
+var seq = 0
+var id = Math.random()
+
+swarm.on('connection', function(socket, peer){
   socket = jsonStream(socket)
   connections.add(socket)
-  console.log("I am connected to...", id)
+  console.log("I am connected to...", peer)
   console.log("active sockets: ", connections.size)
 
   socket.on('close', function(){
@@ -21,12 +24,22 @@ swarm.on('connection', function(socket, id){
   })
 
   socket.on('data', function(data){
-    console.log(data.username + "> " + data.message)
+    if (data.seq > seq) {
+      console.log(data.username + "> " + data.message + " (" + data.seq +")")
+      connections.forEach(function(socket){
+        socket.write({ username: data.username, seq: data.seq,  message: data.message.toString().trim() })
+      })
+      seq = data.seq
+    }
+    else {
+      console.log(data.username + "> " + data.message + " (" + data.seq +")")
+    }
   })
 })
 
 process.stdin.on('data', function(data){
+  seq ++
   connections.forEach(function(socket){
-    socket.write({ username: username, message: data.toString().trim() })
+    socket.write({ username: username, seq: seq,  message: data.toString().trim() })
   })
 })
