@@ -1,14 +1,21 @@
 var net = require('net')
+require('lookup-multicast-dns')
 var jsonStream = require('duplex-json-stream')
 var topology = require('fully-connected-topology');
 var streamSet = require('stream-set')
+var hashToPort = require('hash-to-port')
+var register = require('register-multicast-dns')
 
 var username = process.argv[2]
-var me = process.argv[3]
-var peers = process.argv.slice(4)
+var peers = process.argv.slice(3)
+
+register(toHost(username))
+
+var me = toAddress(username)
+var peerAddresses = peers.map(toAddress)
 
 var connections = streamSet()
-var swarm = topology(me, peers)
+var swarm = topology(me, peerAddresses)
 
 var seq = 0
 var id = Math.random()
@@ -31,9 +38,6 @@ swarm.on('connection', function(socket, peer){
       })
       seq = data.seq
     }
-    else {
-      console.log(data.username + "> " + data.message + " (" + data.seq +")")
-    }
   })
 })
 
@@ -43,3 +47,10 @@ process.stdin.on('data', function(data){
     socket.write({ username: username, seq: seq,  message: data.toString().trim() })
   })
 })
+
+function toAddress (username) {
+  return toHost(username) + ':' + hashToPort(username)
+}
+function toHost (username) {
+  return username + '.local'
+}
