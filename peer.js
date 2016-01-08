@@ -32,9 +32,9 @@ swarm.on('connection', function(socket, peer){
 
   socket.on('data', function(data){
     if (data.seq > seq) {
-      console.log(data.username + "> " + data.message + " (" + data.seq +")")
+      console.log(data.username + "> " + data.message)
       connections.forEach(function(socket){
-        socket.write({ username: data.username, seq: data.seq,  message: data.message.toString().trim() })
+        socket.write({ id: data.id, username: data.username, seq: data.seq,  message: data.message.toString().trim() })
       })
       seq = data.seq
     }
@@ -44,7 +44,7 @@ swarm.on('connection', function(socket, peer){
 process.stdin.on('data', function(data){
   seq ++
   connections.forEach(function(socket){
-    socket.write({ username: username, seq: seq,  message: data.toString().trim() })
+    socket.write({ id: id, username: username, seq: seq,  message: data.toString().trim() })
   })
 })
 
