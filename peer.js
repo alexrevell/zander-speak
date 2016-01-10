@@ -13,10 +13,8 @@ register(toHost(username))
 
 var me = toAddress(username)
 var peerAddresses = peers.map(toAddress)
-
 var connections = streamSet()
 var swarm = topology(me, peerAddresses)
-
 var seq = 0
 var id = Math.random()
 
@@ -26,25 +24,35 @@ swarm.on('connection', function(socket, peer){
   console.log("I am connected to...", peer)
   console.log("active sockets: ", connections.size)
 
-  socket.on('close', function(){
-    console.log("active sockets: ", connections.size)
-  })
-
   socket.on('data', function(data){
     if (data.seq > seq) {
       console.log(data.username + "> " + data.message)
       connections.forEach(function(socket){
-        socket.write({ id: data.id, username: data.username, seq: data.seq,  message: data.message.toString().trim() })
+        socket.write({
+          id: data.id,
+          username: data.username,
+          seq: data.seq,
+          message: data.message.toString().trim()
+        })
       })
       seq = data.seq
     }
+  })
+
+  socket.on('close', function(){
+    console.log("active sockets: ", connections.size)
   })
 })
 
 process.stdin.on('data', function(data){
   seq ++
   connections.forEach(function(socket){
-    socket.write({ id: id, username: username, seq: seq,  message: data.toString().trim() })
+    socket.write({
+      id: id,
+      username: username,
+      seq: seq,
+      message: data.toString().trim()
+    })
   })
 })
 
