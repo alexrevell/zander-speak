@@ -21,3 +21,7 @@ eg. npm start alex esther keith
 
 At the moment if a user connects after a message has already been sent then they won't receive it.
 Also any messages this user sends won't be received until after one of the original connected peers sends another message
+
+### Credits ###
+
+I built this following on from http://mafintosh.github.io/p2p-workshop/build/01.html which is a peer to peer workshop made by Mathias Buus https://github.com/mafintosh who also provides a number of the modules used to put it together.
