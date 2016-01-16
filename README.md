@@ -12,10 +12,18 @@ clone this repo down, then run
 
 `npm install`
 
+I re-wrote the peer.js file in ES6 javascript so in order to use it you need to compile it from the source into the distributable folder. Run the following command:
+
+`npm run build`
+
+this creates, if it doesn't already exist, the `dist` folder and places an ES5-legible version of `peer.js` inside it.
+
 You can choose your username to use, and any other people on your network's usernames, and enter them like this:
 
 `npm start <your-username> <another-username> ...<more names>`
-eg. npm start alex esther keith
+eg. `npm start alex esther keith`
+
+this runs the compiled peer.js file, connecting you to the other users you name (or will do when they connect)
 
 ### Bugs ###
 
