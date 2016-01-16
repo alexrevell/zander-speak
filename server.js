@@ -28,7 +28,7 @@ var server = net.createServer(function(socket){
   })
 })
 
-server.listen(8124)
+server.listen(process.env.PORT || 8124)
 
 var getIndex = function(stream){
   return activeSockets.streams.indexOf(stream)

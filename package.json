@@ -10,13 +10,18 @@
     "level": "^1.4.0",
     "lookup-multicast-dns": "^1.0.3",
     "net": "^1.0.2",
+    "ramda": "^0.19.1",
     "register-multicast-dns": "^1.1.0",
     "stream-set": "^1.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-preset-es2015": "^6.3.13"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node peer.js"
+    "start": "node dist/peer.js",
+    "build": "babel lib -d dist --presets es2015"
   },
   "keywords": [
     "node",
